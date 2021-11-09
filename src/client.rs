@@ -1,4 +1,4 @@
-use crate::request_handlers::{GetAccount, GetImage, UploadImage};
+use crate::request_builders::{GetAccount, GetImage, UploadImage};
 
 pub struct Client {
     base_url: String,
