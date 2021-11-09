@@ -95,13 +95,14 @@ impl ClientBuilder {
     }
 
     fn authorization_header_value(&self) -> Option<String> {
-        if let Some(value) = &self.access_token {
-            Some(format!("Bearer {}", value))
-        } else if let Some(value) = &self.client_id {
-            Some(format!("Client-ID {}", value))
-        } else {
-            None
-        }
+        self.access_token
+            .as_ref()
+            .map(|value| format!("Bearer {}", value))
+            .or_else(|| {
+                self.client_id
+                    .as_ref()
+                    .map(|value| format!("Client-ID {}", value))
+            })
     }
 }
 
