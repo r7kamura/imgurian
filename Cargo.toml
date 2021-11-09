@@ -6,3 +6,8 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+async-trait = "0.1.51"
+reqwest = { version = "0.11.6", features = ["json"] }
+serde = "1.0.130"
+tokio = { version = "1.13.0", features = ["rt", "macros"] }
+wiremock = "0.5.8"
