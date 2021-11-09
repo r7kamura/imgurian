@@ -8,21 +8,26 @@ impl Client {
         ClientBuilder::default()
     }
 
+    pub async fn get_account(
+        &self,
+        user_name: impl Into<String>,
+    ) -> Result<crate::models::Account, reqwest::Error> {
+        self.get(format!("/3/account/{}", user_name.into())).await
+    }
+
     pub async fn get_image(
         &self,
         image_hash: impl Into<String>,
     ) -> Result<crate::models::Image, reqwest::Error> {
-        let path = format!("/3/image/{}", image_hash.into());
-        self.get(path).await
+        self.get(format!("/3/image/{}", image_hash.into())).await
     }
 
     pub async fn upload_image(
         &self,
         image: String,
     ) -> Result<crate::models::Image, reqwest::Error> {
-        let path = "/3/image".to_string();
-        let parameters = [("image", image)];
-        self.post(path, Some(parameters)).await
+        self.post("/3/image".to_string(), Some([("image", image)]))
+            .await
     }
 
     async fn get<T: serde::de::DeserializeOwned>(&self, path: String) -> Result<T, reqwest::Error> {
@@ -164,6 +169,24 @@ mod tests {
             .build()
             .unwrap();
         let _ = client.get_image("1234567890abcdef").await;
+    }
+
+    #[tokio::test]
+    async fn client_get_account_sends_http_request() {
+        let server = MockServer::start().await;
+        let user_name = "dummy_user_name";
+        Mock::given(method("GET"))
+            .and(path(format!("/3/account/{}", user_name)))
+            .respond_with(
+                ResponseTemplate::new(200)
+                    .set_body_string(include_str!("../tests/fixtures/account.json")),
+            )
+            .expect(1)
+            .mount(&server)
+            .await;
+        let client = Client::builder().base_url(server.uri()).build().unwrap();
+        let result = client.get_account(user_name).await;
+        assert!(result.is_ok());
     }
 
     #[tokio::test]
