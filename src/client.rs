@@ -1,12 +1,58 @@
-use reqwest;
-
 pub struct Client {
+    base_url: String,
+    client: reqwest::Client,
+}
+
+impl Client {
+    pub fn builder() -> ClientBuilder {
+        ClientBuilder::default()
+    }
+
+    pub async fn get_image(
+        &self,
+        image_hash: impl Into<String>,
+    ) -> Result<crate::models::Image, reqwest::Error> {
+        let path = format!("/3/image/{}", image_hash.into());
+        self.get(path).await
+    }
+
+    pub async fn upload_image(
+        &self,
+        image: String,
+    ) -> Result<crate::models::Image, reqwest::Error> {
+        let path = "/3/image".to_string();
+        let parameters = [("image", image)];
+        self.post(path, Some(parameters)).await
+    }
+
+    async fn get<T: serde::de::DeserializeOwned>(&self, path: String) -> Result<T, reqwest::Error> {
+        let url = format!("{}{}", self.base_url, path);
+        self.client.get(url).send().await?.json().await
+    }
+
+    async fn post<T: serde::de::DeserializeOwned, U: serde::Serialize>(
+        &self,
+        path: String,
+        parameters: Option<U>,
+    ) -> Result<T, reqwest::Error> {
+        let url = format!("{}{}", self.base_url, path);
+        self.client
+            .post(url)
+            .form(&parameters)
+            .send()
+            .await?
+            .json()
+            .await
+    }
+}
+
+pub struct ClientBuilder {
     access_token: Option<String>,
     base_url: String,
     client_id: Option<String>,
 }
 
-impl Default for Client {
+impl Default for ClientBuilder {
     fn default() -> Self {
         Self {
             access_token: None,
@@ -16,9 +62,21 @@ impl Default for Client {
     }
 }
 
-impl Client {
-    pub fn new() -> Self {
-        Default::default()
+impl ClientBuilder {
+    pub fn build(self) -> Result<Client, reqwest::Error> {
+        let mut map = reqwest::header::HeaderMap::new();
+        if let Some(value) = self.authorization_header_value() {
+            map.append(reqwest::header::AUTHORIZATION, value.parse().unwrap());
+        }
+
+        let client = reqwest::Client::builder()
+            .user_agent("imguria")
+            .default_headers(map)
+            .build()?;
+        Ok(Client {
+            base_url: self.base_url,
+            client,
+        })
     }
 
     pub fn access_token(mut self, value: String) -> Self {
@@ -34,33 +92,6 @@ impl Client {
     pub fn client_id(mut self, value: String) -> Self {
         self.client_id = Some(value);
         self
-    }
-
-    pub async fn get_image(
-        &self,
-        image_hash: impl Into<String>,
-    ) -> Result<crate::models::Image, reqwest::Error> {
-        let url = format!("{}/3/image/{}", self.base_url, image_hash.into());
-        let client = reqwest::Client::new();
-        let mut builder = client.get(url);
-        if let Some(value) = self.authorization_header_value() {
-            builder = builder.header(reqwest::header::AUTHORIZATION, value);
-        }
-        builder.send().await?.json().await
-    }
-
-    pub async fn upload_image(
-        &self,
-        image: String,
-    ) -> Result<crate::models::Image, reqwest::Error> {
-        let url = format!("{}/3/image", self.base_url);
-        let client = reqwest::Client::new();
-        let mut builder = client.post(url);
-        if let Some(value) = self.authorization_header_value() {
-            builder = builder.header(reqwest::header::AUTHORIZATION, value);
-        }
-        let form = [("image", image)];
-        builder.form(&form).send().await?.json().await
     }
 
     fn authorization_header_value(&self) -> Option<String> {
@@ -91,9 +122,11 @@ mod tests {
             .expect(1)
             .mount(&server)
             .await;
-        let client = Client::new()
+        let client = Client::builder()
             .base_url(server.uri())
-            .access_token("dummy_access_token".to_string());
+            .access_token("dummy_access_token".to_string())
+            .build()
+            .unwrap();
         let _ = client.get_image("1234567890abcdef").await;
     }
 
@@ -106,9 +139,11 @@ mod tests {
             .expect(1)
             .mount(&server)
             .await;
-        let client = Client::new()
+        let client = Client::builder()
             .base_url(server.uri())
-            .client_id("dummy_client_id".to_string());
+            .client_id("dummy_client_id".to_string())
+            .build()
+            .unwrap();
         let _ = client.get_image("1234567890abcdef").await;
     }
 
@@ -121,10 +156,12 @@ mod tests {
             .expect(1)
             .mount(&server)
             .await;
-        let client = Client::new()
+        let client = Client::builder()
             .base_url(server.uri())
             .access_token("dummy_access_token".to_string())
-            .client_id("dummy_client_id".to_string());
+            .client_id("dummy_client_id".to_string())
+            .build()
+            .unwrap();
         let _ = client.get_image("1234567890abcdef").await;
     }
 
@@ -141,7 +178,7 @@ mod tests {
             .expect(1)
             .mount(&server)
             .await;
-        let client = Client::new().base_url(server.uri());
+        let client = Client::builder().base_url(server.uri()).build().unwrap();
         let result = client.get_image(image_hash).await;
         assert!(result.is_ok());
     }
@@ -158,7 +195,7 @@ mod tests {
             .expect(1)
             .mount(&server)
             .await;
-        let client = Client::new().base_url(server.uri());
+        let client = Client::builder().base_url(server.uri()).build().unwrap();
         let image = std::fs::read("tests/fixtures/image.png").unwrap();
         let result = client.upload_image(base64::encode(&image)).await;
         assert!(result.is_ok());
