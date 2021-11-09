@@ -1,3 +1,5 @@
+use crate::request_handlers::{GetAccount, GetImage, UploadImage};
+
 pub struct Client {
     base_url: String,
     client: reqwest::Client,
@@ -8,34 +10,27 @@ impl Client {
         ClientBuilder::default()
     }
 
-    pub async fn get_account(
-        &self,
-        user_name: impl Into<String>,
-    ) -> Result<crate::models::Account, reqwest::Error> {
-        self.get(format!("/3/account/{}", user_name.into())).await
+    pub fn get_account(&self, user_name: impl Into<String>) -> GetAccount {
+        GetAccount::new(self, user_name.into())
     }
 
-    pub async fn get_image(
-        &self,
-        image_hash: impl Into<String>,
-    ) -> Result<crate::models::Image, reqwest::Error> {
-        self.get(format!("/3/image/{}", image_hash.into())).await
+    pub fn get_image(&self, image_hash: impl Into<String>) -> GetImage {
+        GetImage::new(self, image_hash.into())
     }
 
-    pub async fn upload_image(
-        &self,
-        image: String,
-    ) -> Result<crate::models::Image, reqwest::Error> {
-        self.post("/3/image".to_string(), Some([("image", image)]))
-            .await
+    pub fn upload_image(&self, image: String) -> UploadImage {
+        UploadImage::new(self, image)
     }
 
-    async fn get<T: serde::de::DeserializeOwned>(&self, path: String) -> Result<T, reqwest::Error> {
+    pub async fn get<T: serde::de::DeserializeOwned>(
+        &self,
+        path: String,
+    ) -> Result<T, reqwest::Error> {
         let url = format!("{}{}", self.base_url, path);
         self.client.get(url).send().await?.json().await
     }
 
-    async fn post<T: serde::de::DeserializeOwned, U: serde::Serialize>(
+    pub async fn post<T: serde::de::DeserializeOwned, U: serde::Serialize>(
         &self,
         path: String,
         parameters: Option<U>,
@@ -115,7 +110,7 @@ impl ClientBuilder {
 mod tests {
     use super::Client;
     use wiremock::{
-        matchers::{any, header, method, path},
+        matchers::{any, header},
         Mock, MockServer, ResponseTemplate,
     };
 
@@ -133,7 +128,7 @@ mod tests {
             .access_token("dummy_access_token".to_string())
             .build()
             .unwrap();
-        let _ = client.get_image("1234567890abcdef").await;
+        let _ = client.get_image("1234567890abcdef").send().await;
     }
 
     #[tokio::test]
@@ -150,7 +145,7 @@ mod tests {
             .client_id("dummy_client_id".to_string())
             .build()
             .unwrap();
-        let _ = client.get_image("1234567890abcdef").await;
+        let _ = client.get_image("1234567890abcdef").send().await;
     }
 
     #[tokio::test]
@@ -168,60 +163,6 @@ mod tests {
             .client_id("dummy_client_id".to_string())
             .build()
             .unwrap();
-        let _ = client.get_image("1234567890abcdef").await;
-    }
-
-    #[tokio::test]
-    async fn client_get_account_sends_http_request() {
-        let server = MockServer::start().await;
-        let user_name = "dummy_user_name";
-        Mock::given(method("GET"))
-            .and(path(format!("/3/account/{}", user_name)))
-            .respond_with(
-                ResponseTemplate::new(200)
-                    .set_body_string(include_str!("../tests/fixtures/account.json")),
-            )
-            .expect(1)
-            .mount(&server)
-            .await;
-        let client = Client::builder().base_url(server.uri()).build().unwrap();
-        let result = client.get_account(user_name).await;
-        assert!(result.is_ok());
-    }
-
-    #[tokio::test]
-    async fn client_get_image_sends_http_request() {
-        let server = MockServer::start().await;
-        let image_hash = "1234567890abcdef";
-        Mock::given(method("GET"))
-            .and(path(format!("/3/image/{}", image_hash)))
-            .respond_with(
-                ResponseTemplate::new(200)
-                    .set_body_string(include_str!("../tests/fixtures/image.json")),
-            )
-            .expect(1)
-            .mount(&server)
-            .await;
-        let client = Client::builder().base_url(server.uri()).build().unwrap();
-        let result = client.get_image(image_hash).await;
-        assert!(result.is_ok());
-    }
-
-    #[tokio::test]
-    async fn client_upload_image_sends_http_request() {
-        let server = MockServer::start().await;
-        Mock::given(method("POST"))
-            .and(path("/3/image"))
-            .respond_with(
-                ResponseTemplate::new(200)
-                    .set_body_string(include_str!("../tests/fixtures/image.json")),
-            )
-            .expect(1)
-            .mount(&server)
-            .await;
-        let client = Client::builder().base_url(server.uri()).build().unwrap();
-        let image = std::fs::read("tests/fixtures/image.png").unwrap();
-        let result = client.upload_image(base64::encode(&image)).await;
-        assert!(result.is_ok());
+        let _ = client.get_image("1234567890abcdef").send().await;
     }
 }
