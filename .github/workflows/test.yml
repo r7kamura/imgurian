@@ -25,5 +25,5 @@ jobs:
       - uses: r7kamura/rust-problem-matchers@v1
       - run: cargo fmt -- --check
       - run: cargo build
-      - run: cargo clippy
+      - run: cargo clippy -- -D warnings
       - run: cargo test
