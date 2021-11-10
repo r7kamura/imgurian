@@ -4,6 +4,7 @@ pub mod request_builders;
 
 #[derive(Debug)]
 pub enum Error {
+    ImgurError { details: models::Error },
     ReqwestError { source: reqwest::Error },
 }
 
