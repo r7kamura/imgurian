@@ -1,20 +1,25 @@
 use crate::client::Client;
 use crate::models::Image;
 use crate::Result;
+use base64;
 
 pub struct UploadImage<'a> {
     client: &'a Client,
-    image: String,
+    image: Vec<u8>,
 }
 
 impl<'a> UploadImage<'a> {
-    pub fn new(client: &'a Client, image: String) -> Self {
-        Self { client, image }
+    pub fn new(client: &'a Client, image: Vec<u8>) -> Self {
+        Self {
+            client,
+            image: image,
+        }
     }
 
     pub async fn send(self) -> Result<Image> {
+        let encoded_image = base64::encode(self.image);
         self.client
-            .post("/3/image".to_string(), Some([("image", self.image)]))
+            .post("/3/image".to_string(), Some([("image", encoded_image)]))
             .await
     }
 }
@@ -41,7 +46,7 @@ mod tests {
             .await;
         let client = Client::builder().base_url(server.uri()).build().unwrap();
         let image = std::fs::read("tests/fixtures/image.png").unwrap();
-        let result = client.upload_image(base64::encode(&image)).send().await;
+        let result = client.upload_image(image).send().await;
         assert!(result.is_ok());
     }
 }

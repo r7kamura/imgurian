@@ -19,7 +19,7 @@ impl Client {
         GetImage::new(self, image_hash.into())
     }
 
-    pub fn upload_image(&self, image: String) -> UploadImage {
+    pub fn upload_image(&self, image: Vec<u8>) -> UploadImage {
         UploadImage::new(self, image)
     }
 
