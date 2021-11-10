@@ -23,10 +23,14 @@ impl Client {
         UploadImage::new(self, image)
     }
 
-    pub async fn get<T: serde::de::DeserializeOwned>(&self, path: String) -> Result<T> {
+    pub async fn get<T, A>(&self, path: A) -> Result<T>
+    where
+        T: serde::de::DeserializeOwned,
+        A: AsRef<str>,
+    {
         let response = self
             .client
-            .get(format!("{}{}", self.base_url, path))
+            .get(format!("{}{}", self.base_url, path.as_ref()))
             .send()
             .await?;
         let response = map_unsuccess_to_imgur_error(response).await?;
@@ -34,14 +38,15 @@ impl Client {
         Ok(model)
     }
 
-    pub async fn post<T: serde::de::DeserializeOwned, U: serde::Serialize>(
-        &self,
-        path: String,
-        parameters: Option<U>,
-    ) -> Result<T> {
+    pub async fn post<T, A, S>(&self, path: A, parameters: Option<S>) -> Result<T>
+    where
+        T: serde::de::DeserializeOwned,
+        A: AsRef<str>,
+        S: serde::Serialize,
+    {
         let response = self
             .client
-            .post(format!("{}{}", self.base_url, path))
+            .post(format!("{}{}", self.base_url, path.as_ref()))
             .form(&parameters)
             .send()
             .await?;
