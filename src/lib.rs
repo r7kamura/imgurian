@@ -2,6 +2,7 @@ pub mod client;
 pub mod models;
 pub mod request_builders;
 
+#[derive(Debug)]
 pub enum Error {
     ReqwestError { source: reqwest::Error },
 }
