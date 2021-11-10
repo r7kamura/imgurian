@@ -24,15 +24,14 @@ impl Client {
     }
 
     pub async fn get<T: serde::de::DeserializeOwned>(&self, path: String) -> Result<T> {
-        Ok(map_imgur_error(
-            self.client
-                .get(format!("{}{}", self.base_url, path))
-                .send()
-                .await?,
-        )
-        .await?
-        .json()
-        .await?)
+        let response = self
+            .client
+            .get(format!("{}{}", self.base_url, path))
+            .send()
+            .await?;
+        let response = map_unsuccess_to_imgur_error(response).await?;
+        let model = map_json_to_model(response).await?;
+        Ok(model)
     }
 
     pub async fn post<T: serde::de::DeserializeOwned, U: serde::Serialize>(
@@ -40,16 +39,15 @@ impl Client {
         path: String,
         parameters: Option<U>,
     ) -> Result<T> {
-        Ok(map_imgur_error(
-            self.client
-                .post(format!("{}{}", self.base_url, path))
-                .form(&parameters)
-                .send()
-                .await?,
-        )
-        .await?
-        .json()
-        .await?)
+        let response = self
+            .client
+            .post(format!("{}{}", self.base_url, path))
+            .form(&parameters)
+            .send()
+            .await?;
+        let response = map_unsuccess_to_imgur_error(response).await?;
+        let model = map_json_to_model(response).await?;
+        Ok(model)
     }
 }
 
@@ -113,7 +111,16 @@ impl ClientBuilder {
     }
 }
 
-async fn map_imgur_error(response: reqwest::Response) -> Result<reqwest::Response> {
+async fn map_json_to_model<T: serde::de::DeserializeOwned>(
+    response: reqwest::Response,
+) -> Result<T> {
+    let text = response.text().await?;
+    let deserializer = &mut serde_json::Deserializer::from_str(&text);
+    let model = serde_path_to_error::deserialize(deserializer)?;
+    Ok(model)
+}
+
+async fn map_unsuccess_to_imgur_error(response: reqwest::Response) -> Result<reqwest::Response> {
     if response.status().is_success() {
         Ok(response)
     } else {
