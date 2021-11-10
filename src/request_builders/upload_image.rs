@@ -1,4 +1,6 @@
 use crate::client::Client;
+use crate::models::Image;
+use crate::Result;
 
 pub struct UploadImage<'a> {
     client: &'a Client,
@@ -10,7 +12,7 @@ impl<'a> UploadImage<'a> {
         Self { client, image }
     }
 
-    pub async fn send(self) -> Result<crate::models::Image, reqwest::Error> {
+    pub async fn send(self) -> Result<Image> {
         self.client
             .post("/3/image".to_string(), Some([("image", self.image)]))
             .await
