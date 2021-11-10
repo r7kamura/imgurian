@@ -29,3 +29,7 @@ let image = client.get_image("orunSTu").send().await?;
 let bytes = fs::read(file_path).unwrap();
 let image = client.upload_image(bytes).send().await?;
 ```
+
+### Others
+
+See [examples](/examples) for more examples!
