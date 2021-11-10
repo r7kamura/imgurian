@@ -1,6 +1,6 @@
 # imguria
 
-[Imgur API](https://apidocs.imgur.com/) client for Rust.
+[Tokio](https://github.com/tokio-rs/tokio)-based [Imgur API](https://apidocs.imgur.com/) client for Rust.
 
 ## Usage
 
