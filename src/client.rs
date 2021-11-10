@@ -124,9 +124,8 @@ async fn map_unsuccess_to_imgur_error(response: reqwest::Response) -> Result<req
     if response.status().is_success() {
         Ok(response)
     } else {
-        Err(crate::Error::ImgurError {
-            details: response.json().await?,
-        })
+        let details = map_json_to_model(response).await?;
+        Err(crate::Error::ImgurError { details })
     }
 }
 
