@@ -1,4 +1,4 @@
-use crate::request_builders::{GetAccount, GetImage, UploadImage};
+use crate::request_builders::{DeleteImage, GetAccount, GetImage, UploadImage};
 use crate::Result;
 
 pub struct Client {
@@ -11,6 +11,10 @@ impl Client {
         ClientBuilder::default()
     }
 
+    pub fn delete_image(&self, image_hash: impl Into<String>) -> DeleteImage {
+        DeleteImage::new(self, image_hash.into())
+    }
+
     pub fn get_account(&self, user_name: impl Into<String>) -> GetAccount {
         GetAccount::new(self, user_name.into())
     }
@@ -21,6 +25,21 @@ impl Client {
 
     pub fn upload_image(&self, image: Vec<u8>) -> UploadImage {
         UploadImage::new(self, image)
+    }
+
+    pub async fn delete<T, A>(&self, path: A) -> Result<T>
+    where
+        T: serde::de::DeserializeOwned,
+        A: AsRef<str>,
+    {
+        let response = self
+            .client
+            .delete(format!("{}{}", self.base_url, path.as_ref()))
+            .send()
+            .await?;
+        let response = map_unsuccess_to_imgur_error(response).await?;
+        let model = map_json_to_model(response).await?;
+        Ok(model)
     }
 
     pub async fn get<T, A>(&self, path: A) -> Result<T>
