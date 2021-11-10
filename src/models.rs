@@ -15,7 +15,7 @@ pub struct AccountData {
     id: u32,
     pro_expiration: bool,
     reputation_name: String,
-    reputation: u32,
+    reputation: i32,
     url: String,
     user_follow: AccountUserFollow,
 }
@@ -48,14 +48,13 @@ pub struct Image {
 
 #[derive(Debug, Deserialize)]
 pub struct ImageData {
-    account_id: u32,
+    account_id: Option<u32>,
     account_url: Option<String>,
     ad_type: u32,
     ad_url: String,
     animated: bool,
     bandwidth: u32,
     datetime: u32,
-    deletehash: String,
     description: Option<String>,
     favorite: bool,
     height: u32,
@@ -64,8 +63,7 @@ pub struct ImageData {
     in_most_viral: bool,
     is_ad: bool,
     link: String,
-    name: String,
-    nsfw: Option<String>,
+    nsfw: Option<bool>,
     section: Option<String>,
     size: u32,
     tags: Vec<String>,
