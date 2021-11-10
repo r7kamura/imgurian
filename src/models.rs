@@ -26,6 +26,13 @@ pub struct AccountUserFollow {
 }
 
 #[derive(Debug, Deserialize)]
+pub struct DeleteImage {
+    data: bool,
+    success: bool,
+    status: u32,
+}
+
+#[derive(Debug, Deserialize)]
 pub struct Error {
     data: ErrorData,
     success: bool,
@@ -54,6 +61,7 @@ pub struct ImageData {
     ad_url: String,
     animated: bool,
     bandwidth: u32,
+    deletehash: Option<String>,
     datetime: u32,
     description: Option<String>,
     favorite: bool,
