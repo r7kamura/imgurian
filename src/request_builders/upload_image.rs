@@ -10,10 +10,7 @@ pub struct UploadImage<'a> {
 
 impl<'a> UploadImage<'a> {
     pub fn new(client: &'a Client, image: Vec<u8>) -> Self {
-        Self {
-            client,
-            image: image,
-        }
+        Self { client, image }
     }
 
     pub async fn send(self) -> Result<Image> {
