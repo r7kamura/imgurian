@@ -1,4 +1,6 @@
 use crate::client::Client;
+use crate::models::Account;
+use crate::Result;
 
 pub struct GetAccount<'a> {
     client: &'a Client,
@@ -10,7 +12,7 @@ impl<'a> GetAccount<'a> {
         Self { client, user_name }
     }
 
-    pub async fn send(self) -> Result<crate::models::Account, reqwest::Error> {
+    pub async fn send(self) -> Result<Account> {
         self.client
             .get(format!("/3/account/{}", self.user_name))
             .await

@@ -1,4 +1,6 @@
 use crate::client::Client;
+use crate::models::Image;
+use crate::Result;
 
 pub struct GetImage<'a> {
     client: &'a Client,
@@ -10,7 +12,7 @@ impl<'a> GetImage<'a> {
         Self { client, image_hash }
     }
 
-    pub async fn send(self) -> Result<crate::models::Image, reqwest::Error> {
+    pub async fn send(self) -> Result<Image> {
         self.client
             .get(format!("/3/image/{}", self.image_hash))
             .await

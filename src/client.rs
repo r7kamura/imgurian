@@ -1,4 +1,5 @@
 use crate::request_builders::{GetAccount, GetImage, UploadImage};
+use crate::Result;
 
 pub struct Client {
     base_url: String,
@@ -22,27 +23,25 @@ impl Client {
         UploadImage::new(self, image)
     }
 
-    pub async fn get<T: serde::de::DeserializeOwned>(
-        &self,
-        path: String,
-    ) -> Result<T, reqwest::Error> {
+    pub async fn get<T: serde::de::DeserializeOwned>(&self, path: String) -> Result<T> {
         let url = format!("{}{}", self.base_url, path);
-        self.client.get(url).send().await?.json().await
+        Ok(self.client.get(url).send().await?.json().await?)
     }
 
     pub async fn post<T: serde::de::DeserializeOwned, U: serde::Serialize>(
         &self,
         path: String,
         parameters: Option<U>,
-    ) -> Result<T, reqwest::Error> {
+    ) -> Result<T> {
         let url = format!("{}{}", self.base_url, path);
-        self.client
+        Ok(self
+            .client
             .post(url)
             .form(&parameters)
             .send()
             .await?
             .json()
-            .await
+            .await?)
     }
 }
 
