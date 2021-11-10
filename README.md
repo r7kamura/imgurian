@@ -26,5 +26,6 @@ let image = client.get_image("orunSTu").send().await?;
 ### Upload Image
 
 ```rust
-let image = client.upload_image(base64_encoded_image_data).send().await?;
+let bytes = fs::read(file_path).unwrap();
+let image = client.upload_image(bytes).send().await?;
 ```
