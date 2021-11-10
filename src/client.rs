@@ -24,8 +24,15 @@ impl Client {
     }
 
     pub async fn get<T: serde::de::DeserializeOwned>(&self, path: String) -> Result<T> {
-        let url = format!("{}{}", self.base_url, path);
-        Ok(self.client.get(url).send().await?.json().await?)
+        Ok(map_imgur_error(
+            self.client
+                .get(format!("{}{}", self.base_url, path))
+                .send()
+                .await?,
+        )
+        .await?
+        .json()
+        .await?)
     }
 
     pub async fn post<T: serde::de::DeserializeOwned, U: serde::Serialize>(
@@ -33,15 +40,16 @@ impl Client {
         path: String,
         parameters: Option<U>,
     ) -> Result<T> {
-        let url = format!("{}{}", self.base_url, path);
-        Ok(self
-            .client
-            .post(url)
-            .form(&parameters)
-            .send()
-            .await?
-            .json()
-            .await?)
+        Ok(map_imgur_error(
+            self.client
+                .post(format!("{}{}", self.base_url, path))
+                .form(&parameters)
+                .send()
+                .await?,
+        )
+        .await?
+        .json()
+        .await?)
     }
 }
 
@@ -102,6 +110,16 @@ impl ClientBuilder {
                     .as_ref()
                     .map(|value| format!("Client-ID {}", value))
             })
+    }
+}
+
+async fn map_imgur_error(response: reqwest::Response) -> Result<reqwest::Response> {
+    if response.status().is_success() {
+        Ok(response)
+    } else {
+        Err(crate::Error::ImgurError {
+            details: response.json().await?,
+        })
     }
 }
 
