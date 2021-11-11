@@ -38,9 +38,8 @@ impl<'a> UpdateImage<'a> {
     }
 
     pub async fn send(self) -> Result<BasicWithBoolData> {
-        self.client
-            .post(format!("/3/image/{}", self.image_hash), Some(&self))
-            .await
+        let path = format!("/3/image/{}", self.image_hash);
+        self.client.post(path, Some(&self)).await
     }
 }
 
