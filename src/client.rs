@@ -1,5 +1,7 @@
 use crate::error::Error::ImgurError;
-use crate::request_builders::{DeleteImage, FavoriteImage, GetAccount, GetImage, UploadImage};
+use crate::request_builders::{
+    DeleteImage, FavoriteImage, GetAccount, GetImage, UpdateImage, UploadImage,
+};
 use crate::result::Result;
 
 pub struct Client {
@@ -26,6 +28,10 @@ impl Client {
 
     pub fn favorite_image(&self, image_hash: impl Into<String>) -> FavoriteImage {
         FavoriteImage::new(self, image_hash.into())
+    }
+
+    pub fn update_image(&self, image_hash: impl Into<String>) -> UpdateImage {
+        UpdateImage::new(self, image_hash.into())
     }
 
     pub fn upload_image(&self, image: Vec<u8>) -> UploadImage {
