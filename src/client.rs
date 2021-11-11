@@ -119,18 +119,18 @@ impl ClientBuilder {
         })
     }
 
-    pub fn access_token(mut self, value: String) -> Self {
-        self.access_token = Some(value);
+    pub fn access_token(mut self, value: impl Into<String>) -> Self {
+        self.access_token = Some(value.into());
         self
     }
 
-    pub fn base_url(mut self, value: String) -> Self {
-        self.base_url = value;
+    pub fn base_url(mut self, value: impl Into<String>) -> Self {
+        self.base_url = value.into();
         self
     }
 
-    pub fn client_id(mut self, value: String) -> Self {
-        self.client_id = Some(value);
+    pub fn client_id(mut self, value: impl Into<String>) -> Self {
+        self.client_id = Some(value.into());
         self
     }
 
