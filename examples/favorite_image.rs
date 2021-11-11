@@ -1,13 +1,18 @@
 use imgurian::client::Client;
 use imgurian::error::Error;
-use std::env;
+use structopt::StructOpt;
+
+#[derive(Debug, StructOpt)]
+struct Opt {
+    imgur_client_id: String,
+    hash: String,
+}
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-    let access_token =
-        env::var("IMGUR_ACCESS_TOKEN").expect("Specify IMGUR_ACCESS_TOKEN environment variable.");
-    let client = Client::builder().access_token(access_token).build()?;
-    let basic = client.favorite_image("Oxk2SNG").send().await?;
+    let opt = Opt::from_args();
+    let client = Client::builder().client_id(opt.imgur_client_id).build()?;
+    let basic = client.favorite_image(opt.hash).send().await?;
     dbg!(basic);
     Ok(())
 }

@@ -1,18 +1,31 @@
 use imgurian::client::Client;
 use imgurian::error::Error;
-use std::env;
+use structopt::StructOpt;
+
+#[derive(Debug, StructOpt)]
+struct Opt {
+    imgur_client_id: String,
+    delete_hash: String,
+
+    #[structopt(long)]
+    title: Option<String>,
+
+    #[structopt(long)]
+    description: Option<String>,
+}
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-    let client_id =
-        env::var("IMGUR_CLIENT_ID").expect("Specify IMGUR_CLIENT_ID environment variable.");
-    let client = Client::builder().client_id(client_id).build()?;
-    let basic = client
-        .update_image("5LRukel6PzSi5H3")
-        .title("test2")
-        .description("test2")
-        .send()
-        .await?;
+    let opt = Opt::from_args();
+    let client = Client::builder().client_id(opt.imgur_client_id).build()?;
+    let mut builder = client.update_image(opt.delete_hash);
+    if let Some(title) = opt.title {
+        builder = builder.title(title);
+    }
+    if let Some(description) = opt.description {
+        builder = builder.description(description);
+    }
+    let basic = builder.send().await?;
     dbg!(basic);
     Ok(())
 }

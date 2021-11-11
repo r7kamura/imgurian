@@ -1,13 +1,18 @@
 use imgurian::client::Client;
 use imgurian::error::Error;
-use std::env;
+use structopt::StructOpt;
+
+#[derive(Debug, StructOpt)]
+struct Opt {
+    imgur_client_id: String,
+    user_name: String,
+}
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-    let client_id =
-        env::var("IMGUR_CLIENT_ID").expect("Specify IMGUR_CLIENT_ID environment variable.");
-    let client = Client::builder().client_id(client_id).build()?;
-    let account = client.get_account("ghostinspector").send().await?;
+    let opt = Opt::from_args();
+    let client = Client::builder().client_id(opt.imgur_client_id).build()?;
+    let account = client.get_account(opt.user_name).send().await?;
     dbg!(account);
     Ok(())
 }
