@@ -1,5 +1,5 @@
 use imguria::client::Client;
-use imguria::Error;
+use imguria::error::Error;
 use std::env;
 use std::fs;
 

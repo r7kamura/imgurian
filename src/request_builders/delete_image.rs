@@ -1,6 +1,6 @@
 use crate::client::Client;
 use crate::models::BasicWithBoolData;
-use crate::Result;
+use crate::result::Result;
 
 pub struct DeleteImage<'a> {
     client: &'a Client,

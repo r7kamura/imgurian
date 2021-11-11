@@ -1,6 +1,6 @@
 use crate::client::Client;
 use crate::models::Account;
-use crate::Result;
+use crate::result::Result;
 
 pub struct GetAccount<'a> {
     client: &'a Client,

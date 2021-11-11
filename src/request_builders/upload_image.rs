@@ -1,6 +1,6 @@
 use crate::client::Client;
 use crate::models::Image;
-use crate::Result;
+use crate::result::Result;
 use base64;
 
 pub struct UploadImage<'a> {

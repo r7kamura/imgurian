@@ -1,6 +1,5 @@
 pub mod client;
+pub mod error;
 pub mod models;
 pub mod request_builders;
-
-mod types;
-pub use types::{Error, Result};
+pub mod result;

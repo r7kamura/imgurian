@@ -1,6 +1,6 @@
+use crate::error::Error::ImgurError;
 use crate::request_builders::{DeleteImage, FavoriteImage, GetAccount, GetImage, UploadImage};
-use crate::Error::ImgurError;
-use crate::Result;
+use crate::result::Result;
 
 pub struct Client {
     base_url: String,

@@ -1,6 +1,6 @@
 use crate::client::Client;
 use crate::models::BasicWithStringData;
-use crate::Result;
+use crate::result::Result;
 
 pub struct FavoriteImage<'a> {
     client: &'a Client,
