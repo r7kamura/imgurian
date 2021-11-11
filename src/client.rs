@@ -1,4 +1,5 @@
 use crate::request_builders::{DeleteImage, GetAccount, GetImage, UploadImage};
+use crate::Error::ImgurError;
 use crate::Result;
 
 pub struct Client {
@@ -149,7 +150,7 @@ async fn map_unsuccess_to_imgur_error(response: reqwest::Response) -> Result<req
         Ok(response)
     } else {
         let details = map_json_to_model(response).await?;
-        Err(crate::Error::ImgurError { details })
+        Err(ImgurError { details })
     }
 }
 
