@@ -8,7 +8,7 @@
 
 ```rust
 let client_id = std::env::var("IMGUR_CLIENT_ID").unwrap();
-let client = imguria::Client::builder().client_id(client_id).build()?;
+let client = imguria::client::Client::builder().client_id(client_id).build()?;
 ```
 
 ### Get Account
