@@ -10,10 +10,8 @@ use std::fs;
 
 #[tokio::main]
 async fn main() {
-    let client_id = "YOUR_CLIENT_ID".to_string();
-    let file_path = "/path/to/image".to_string();
-    let bytes = fs::read(file_path).unwrap();
-    let client = Client::builder().client_id(client_id).build().unwrap();
+    let bytes = fs::read("/path/to/image").unwrap();
+    let client = Client::builder().client_id("YOUR_CLIENT_ID").build().unwrap();
     let image = client.upload_image(bytes).send().await.unwrap();
     dbg!(image);
 }
