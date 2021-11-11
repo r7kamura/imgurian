@@ -6,7 +6,6 @@
 
 ```rust
 use imguria::client::Client;
-use imguria::Error;
 use std::fs;
 
 #[tokio::main]
