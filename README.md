@@ -4,32 +4,20 @@
 
 ## Usage
 
-### Build client
-
 ```rust
-let client_id = std::env::var("IMGUR_CLIENT_ID").unwrap();
-let client = imguria::client::Client::builder().client_id(client_id).build()?;
+use imguria::client::Client;
+use imguria::Error;
+use std::fs;
+
+#[tokio::main]
+async fn main() {
+    let client_id = "YOUR_CLIENT_ID".to_string();
+    let file_path = "/path/to/image".to_string();
+    let bytes = fs::read(file_path).unwrap();
+    let client = Client::builder().client_id(client_id).build().unwrap();
+    let image = client.upload_image(bytes).send().await.unwrap();
+    dbg!(image);
+}
 ```
 
-### Get Account
-
-```rust
-let account = client.get_account("ghostinspector").send().await?;
-```
-
-### Get Image
-
-```rust
-let image = client.get_image("orunSTu").send().await?;
-```
-
-### Upload Image
-
-```rust
-let bytes = fs::read(file_path).unwrap();
-let image = client.upload_image(bytes).send().await?;
-```
-
-### Others
-
-See [examples](/examples) for more examples!
+See [examples](/examples) for more.
