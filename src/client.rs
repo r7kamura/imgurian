@@ -110,7 +110,7 @@ impl ClientBuilder {
         }
 
         let client = reqwest::Client::builder()
-            .user_agent("imguria")
+            .user_agent("imgurian")
             .default_headers(map)
             .build()?;
         Ok(Client {

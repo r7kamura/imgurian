@@ -1,11 +1,11 @@
-# imguria
+# imgurian
 
 [Tokio](https://github.com/tokio-rs/tokio)-based [Imgur API](https://apidocs.imgur.com/) client for Rust.
 
 ## Usage
 
 ```rust
-use imguria::client::Client;
+use imgurian::client::Client;
 use std::fs;
 
 #[tokio::main]

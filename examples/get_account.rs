@@ -1,5 +1,5 @@
-use imguria::client::Client;
-use imguria::error::Error;
+use imgurian::client::Client;
+use imgurian::error::Error;
 use std::env;
 
 #[tokio::main]
