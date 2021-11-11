@@ -26,8 +26,15 @@ pub struct AccountUserFollow {
 }
 
 #[derive(Debug, Deserialize)]
-pub struct DeleteImage {
+pub struct BasicWithBoolData {
     data: bool,
+    success: bool,
+    status: u32,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct BasicWithStringData {
+    data: String,
     success: bool,
     status: u32,
 }
