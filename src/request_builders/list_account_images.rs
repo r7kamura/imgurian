@@ -1,20 +1,46 @@
 use crate::client::Client;
 use crate::models::Images;
 use crate::result::Result;
+use serde::Serialize;
 
+#[derive(Serialize)]
 pub struct ListAccountImages<'a> {
+    #[serde(skip)]
     client: &'a Client,
+
+    #[serde(skip)]
     user_name: String,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    page: Option<u32>,
+
+    #[serde(skip_serializing_if = "Option::is_none", rename = "perPage")]
+    per_page: Option<u8>,
 }
 
 impl<'a> ListAccountImages<'a> {
     pub fn new(client: &'a Client, user_name: String) -> Self {
-        Self { client, user_name }
+        Self {
+            client,
+            user_name,
+            page: None,
+            per_page: None,
+        }
+    }
+
+    pub fn page(mut self, value: impl Into<u32>) -> Self {
+        self.page = Some(value.into());
+        self
+    }
+
+    pub fn per_page(mut self, value: impl Into<u8>) -> Self {
+        self.per_page = Some(value.into());
+        self
     }
 
     pub async fn send(self) -> Result<Images> {
         self.client
-            .get(format!("/3/account/{}/images", self.user_name))
+            .get(format!("/3/account/{}/images", self.user_name), Some(&self))
             .await
     }
 }

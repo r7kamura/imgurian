@@ -14,7 +14,7 @@ impl<'a> GetAccount<'a> {
 
     pub async fn send(self) -> Result<Account> {
         self.client
-            .get(format!("/3/account/{}", self.user_name))
+            .get(format!("/3/account/{}", self.user_name), None::<()>)
             .await
     }
 }

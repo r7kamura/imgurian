@@ -14,7 +14,7 @@ impl<'a> GetImage<'a> {
 
     pub async fn send(self) -> Result<Image> {
         self.client
-            .get(format!("/3/image/{}", self.image_hash))
+            .get(format!("/3/image/{}", self.image_hash), None::<()>)
             .await
     }
 }

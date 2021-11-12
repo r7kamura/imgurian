@@ -1,8 +1,9 @@
 use crate::client::Client;
 use crate::models::BasicWithBoolData;
 use crate::result::Result;
+use serde::Serialize;
 
-#[derive(serde::Serialize)]
+#[derive(Serialize)]
 pub struct UpdateImage<'a> {
     #[serde(skip)]
     client: &'a Client,

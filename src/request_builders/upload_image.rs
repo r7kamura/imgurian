@@ -2,8 +2,9 @@ use crate::client::Client;
 use crate::models::Image;
 use crate::result::Result;
 use base64;
+use serde::Serialize;
 
-#[derive(serde::Serialize)]
+#[derive(Serialize)]
 pub struct UploadImage<'a> {
     #[serde(skip)]
     client: &'a Client,
