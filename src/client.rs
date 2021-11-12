@@ -3,6 +3,8 @@ use crate::request_builders::{
     DeleteImage, FavoriteImage, GetAccount, GetImage, ListAccountImages, UpdateImage, UploadImage,
 };
 use crate::result::Result;
+use serde::de::DeserializeOwned;
+use serde::Serialize;
 
 pub struct Client {
     base_url: String,
@@ -44,7 +46,7 @@ impl Client {
 
     pub async fn delete<T, A>(&self, path: A) -> Result<T>
     where
-        T: serde::de::DeserializeOwned,
+        T: DeserializeOwned,
         A: AsRef<str>,
     {
         let response = self
@@ -57,14 +59,16 @@ impl Client {
         Ok(model)
     }
 
-    pub async fn get<T, A>(&self, path: A) -> Result<T>
+    pub async fn get<T, A, S>(&self, path: A, parameters: Option<S>) -> Result<T>
     where
-        T: serde::de::DeserializeOwned,
+        T: DeserializeOwned,
         A: AsRef<str>,
+        S: Serialize,
     {
         let response = self
             .client
             .get(format!("{}{}", self.base_url, path.as_ref()))
+            .query(&parameters)
             .send()
             .await?;
         let response = map_unsuccess_to_imgur_error(response).await?;
@@ -74,9 +78,9 @@ impl Client {
 
     pub async fn post<T, A, S>(&self, path: A, parameters: Option<S>) -> Result<T>
     where
-        T: serde::de::DeserializeOwned,
+        T: DeserializeOwned,
         A: AsRef<str>,
-        S: serde::Serialize,
+        S: Serialize,
     {
         let response = self
             .client
@@ -150,9 +154,7 @@ impl ClientBuilder {
     }
 }
 
-async fn map_json_to_model<T: serde::de::DeserializeOwned>(
-    response: reqwest::Response,
-) -> Result<T> {
+async fn map_json_to_model<T: DeserializeOwned>(response: reqwest::Response) -> Result<T> {
     let text = response.text().await?;
     let deserializer = &mut serde_json::Deserializer::from_str(&text);
     let model = serde_path_to_error::deserialize(deserializer)?;
