@@ -1,6 +1,7 @@
 use crate::error::Error::ImgurError;
 use crate::request_builders::{
-    DeleteImage, FavoriteImage, GetAccount, GetImage, ListAccountImages, UpdateImage, UploadImage,
+    DeleteImage, FavoriteImage, GenerateAccessToken, GetAccount, GetImage, ListAccountImages,
+    UpdateImage, UploadImage,
 };
 use crate::result::Result;
 use serde::de::DeserializeOwned;
@@ -18,6 +19,20 @@ impl Client {
 
     pub fn delete_image(&self, image_hash: impl Into<String>) -> DeleteImage {
         DeleteImage::new(self, image_hash.into())
+    }
+
+    pub fn generate_access_token(
+        &self,
+        client_id: impl Into<String>,
+        client_secret: impl Into<String>,
+        refresh_token: impl Into<String>,
+    ) -> GenerateAccessToken {
+        GenerateAccessToken::new(
+            self,
+            client_id.into(),
+            client_secret.into(),
+            refresh_token.into(),
+        )
     }
 
     pub fn get_account(&self, user_name: impl Into<String>) -> GetAccount {
