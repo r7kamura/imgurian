@@ -11,7 +11,13 @@ pub struct UploadImage<'a> {
     image: String,
 
     #[serde(skip_serializing_if = "Option::is_none")]
+    album: Option<String>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
     description: Option<String>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    name: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     title: Option<String>,
@@ -22,13 +28,25 @@ impl<'a> UploadImage<'a> {
         Self {
             client,
             image: base64::encode(image),
+            album: None,
             description: None,
+            name: None,
             title: None,
         }
     }
 
+    pub fn album(mut self, value: impl Into<String>) -> Self {
+        self.album = Some(value.into());
+        self
+    }
+
     pub fn description(mut self, value: impl Into<String>) -> Self {
         self.description = Some(value.into());
+        self
+    }
+
+    pub fn name(mut self, value: impl Into<String>) -> Self {
+        self.name = Some(value.into());
         self
     }
 
