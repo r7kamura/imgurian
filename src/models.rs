@@ -78,6 +78,7 @@ pub struct ImageData {
     in_most_viral: bool,
     is_ad: bool,
     link: String,
+    name: Option<String>,
     nsfw: Option<bool>,
     section: Option<String>,
     size: u32,
