@@ -2,6 +2,12 @@
 name = "imgurian"
 version = "0.1.0"
 edition = "2018"
+description = "Imgur API client."
+documentation = "https://docs.rs/imgurian"
+homepage = "https://github.com/r7kamura/imgurian"
+license-file = "LICENSE.txt"
+readme = "README.md"
+repository = "https://github.com/r7kamura/imgurian.git"
 
 [dependencies]
 base64 = "0.13.0"
