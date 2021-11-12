@@ -89,3 +89,10 @@ pub struct ImageData {
     vote: Option<String>,
     width: u32,
 }
+
+#[derive(Debug, Deserialize)]
+pub struct Images {
+    data: Vec<ImageData>,
+    success: bool,
+    status: u32,
+}
