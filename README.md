@@ -1,5 +1,7 @@
 # imgurian
 
+[![test](https://github.com/r7kamura/imgurian/actions/workflows/test.yml/badge.svg)](https://github.com/r7kamura/imgurian/actions/workflows/test.yml)
+
 [Imgur API](https://apidocs.imgur.com/) client for Rust.
 
 ## Usage
