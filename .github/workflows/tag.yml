@@ -15,5 +15,7 @@ jobs:
         with:
           fetch-depth: 2
       - uses: salsify/action-detect-and-tag-new-version@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         with:
           version-command: cargo read-manifest | jq -r .version
