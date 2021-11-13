@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-## 0.2.0
+## 0.2.0 - 2021-11-14
 
 ### Added
 
@@ -10,7 +10,7 @@
 - Add `Client::generate_access_token`.
 - Support both access token and client ID authentication on some endpoints.
 
-## 0.1.0
+## 0.1.0 - 2021-11-13
 
 ### Added
 
