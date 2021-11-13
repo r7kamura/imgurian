@@ -9,14 +9,9 @@ pub async fn get_account(opt: Opt) -> Result<()> {
         user_name,
     } = opt
     {
-        let mut client_builder = Client::builder();
-        if let Some(value) = access_token {
-            client_builder = client_builder.access_token(value)
-        }
-        if let Some(value) = client_id {
-            client_builder = client_builder.client_id(value)
-        }
-        let client = client_builder.build()?;
+        let client = Client::builder()
+            .credentials(access_token, client_id)
+            .build()?;
         let basic = client.get_account(user_name).send().await?;
         dbg!(basic);
         Ok(())

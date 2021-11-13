@@ -9,14 +9,9 @@ pub async fn delete_image(opt: Opt) -> Result<()> {
         hash,
     } = opt
     {
-        let mut client_builder = Client::builder();
-        if let Some(value) = access_token {
-            client_builder = client_builder.access_token(value)
-        }
-        if let Some(value) = client_id {
-            client_builder = client_builder.client_id(value)
-        }
-        let client = client_builder.build()?;
+        let client = Client::builder()
+            .credentials(access_token, client_id)
+            .build()?;
         let basic = client.delete_image(hash).send().await?;
         dbg!(basic);
         Ok(())

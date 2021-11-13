@@ -11,14 +11,9 @@ pub async fn update_image(opt: Opt) -> Result<()> {
         title,
     } = opt
     {
-        let mut client_builder = Client::builder();
-        if let Some(value) = access_token {
-            client_builder = client_builder.access_token(value)
-        }
-        if let Some(value) = client_id {
-            client_builder = client_builder.client_id(value)
-        }
-        let client = client_builder.build()?;
+        let client = Client::builder()
+            .credentials(access_token, client_id)
+            .build()?;
         let mut builder = client.update_image(hash);
         if let Some(value) = description {
             builder = builder.description(value);
