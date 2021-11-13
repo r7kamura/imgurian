@@ -19,6 +19,5 @@ serde_path_to_error = "0.1.5"
 structopt = "0.3.25"
 tokio = { version = "1.13.0", features = ["rt-multi-thread", "macros"] }
 
-
 [dev-dependencies]
 wiremock = "0.5.8"
