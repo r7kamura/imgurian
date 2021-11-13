@@ -8,39 +8,16 @@ use structopt::StructOpt;
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    match Opt::from_args() {
-        Opt::DeleteImage { client_id, hash } => delete_image(client_id, hash).await?,
-        Opt::FavoriteImage { client_id, hash } => favorite_image(client_id, hash).await?,
-        Opt::GenerateAccessToken {
-            client_id,
-            client_secret,
-            refresh_token,
-        } => generate_access_token(client_id, client_secret, refresh_token).await?,
-        Opt::GetAccount {
-            client_id,
-            user_name,
-        } => get_account(client_id, user_name).await?,
-        Opt::GetImage { client_id, hash } => get_image(client_id, hash).await?,
-        Opt::ListAccountImages {
-            access_token,
-            user_name,
-            page,
-            per_page,
-        } => list_account_images(access_token, user_name, page, per_page).await?,
-        Opt::UpdateImage {
-            client_id,
-            hash,
-            description,
-            title,
-        } => update_image(client_id, hash, description, title).await?,
-        Opt::UploadImage {
-            album,
-            client_id,
-            description,
-            file_path,
-            name,
-            title,
-        } => upload_image(album, client_id, description, file_path, name, title).await?,
+    let opt = Opt::from_args();
+    match opt {
+        Opt::DeleteImage { .. } => delete_image(opt).await?,
+        Opt::FavoriteImage { .. } => favorite_image(opt).await?,
+        Opt::GenerateAccessToken { .. } => generate_access_token(opt).await?,
+        Opt::GetAccount { .. } => get_account(opt).await?,
+        Opt::GetImage { .. } => get_image(opt).await?,
+        Opt::ListAccountImages { .. } => list_account_images(opt).await?,
+        Opt::UpdateImage { .. } => update_image(opt).await?,
+        Opt::UploadImage { .. } => upload_image(opt).await?,
     }
     Ok(())
 }

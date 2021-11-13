@@ -1,9 +1,26 @@
 use crate::client::Client;
+use crate::opt::Opt;
 use crate::result::Result;
 
-pub async fn delete_image(client_id: String, hash: String) -> Result<()> {
-    let client = Client::builder().client_id(client_id).build()?;
-    let basic = client.delete_image(hash).send().await?;
-    dbg!(basic);
-    Ok(())
+pub async fn delete_image(opt: Opt) -> Result<()> {
+    if let Opt::DeleteImage {
+        access_token,
+        client_id,
+        hash,
+    } = opt
+    {
+        let mut client_builder = Client::builder();
+        if let Some(value) = access_token {
+            client_builder = client_builder.access_token(value)
+        }
+        if let Some(value) = client_id {
+            client_builder = client_builder.client_id(value)
+        }
+        let client = client_builder.build()?;
+        let basic = client.delete_image(hash).send().await?;
+        dbg!(basic);
+        Ok(())
+    } else {
+        panic!()
+    }
 }
