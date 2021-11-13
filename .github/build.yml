@@ -1,4 +1,4 @@
-name: release
+name: build
 
 on:
   release:
@@ -6,7 +6,7 @@ on:
       - created
 
 jobs:
-  release:
+  build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
