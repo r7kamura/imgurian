@@ -157,6 +157,20 @@ impl ClientBuilder {
         self
     }
 
+    pub fn credentials(
+        mut self,
+        access_token: impl Into<Option<String>>,
+        client_id: impl Into<Option<String>>,
+    ) -> Self {
+        if let Some(value) = access_token.into() {
+            self = self.access_token(value)
+        }
+        if let Some(value) = client_id.into() {
+            self = self.client_id(value)
+        }
+        self
+    }
+
     fn authorization_header_value(&self) -> Option<String> {
         self.access_token
             .as_ref()
