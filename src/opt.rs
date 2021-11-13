@@ -4,10 +4,20 @@ use structopt::StructOpt;
 #[structopt(about = "Imgur API client.")]
 pub enum Opt {
     #[structopt(about = "Delete an image.")]
-    DeleteImage { client_id: String, hash: String },
+    DeleteImage {
+        #[structopt(long)]
+        access_token: Option<String>,
+        #[structopt(long)]
+        client_id: Option<String>,
+        hash: String,
+    },
 
     #[structopt(about = "Favorite an image.")]
-    FavoriteImage { client_id: String, hash: String },
+    FavoriteImage {
+        #[structopt(long)]
+        access_token: String,
+        hash: String,
+    },
 
     #[structopt(about = "Generates an access token from given refresh token.")]
     GenerateAccessToken {
@@ -18,15 +28,25 @@ pub enum Opt {
 
     #[structopt(about = "Get information about an account.")]
     GetAccount {
-        client_id: String,
+        #[structopt(long)]
+        access_token: Option<String>,
+        #[structopt(long)]
+        client_id: Option<String>,
         user_name: String,
     },
 
     #[structopt(about = "Get information about an image.")]
-    GetImage { client_id: String, hash: String },
+    GetImage {
+        #[structopt(long)]
+        access_token: Option<String>,
+        #[structopt(long)]
+        client_id: Option<String>,
+        hash: String,
+    },
 
     #[structopt(about = "List account images.")]
     ListAccountImages {
+        #[structopt(long)]
         access_token: String,
         user_name: String,
         #[structopt(long)]
@@ -37,7 +57,10 @@ pub enum Opt {
 
     #[structopt(about = "Update information about an image.")]
     UpdateImage {
-        client_id: String,
+        #[structopt(long)]
+        access_token: Option<String>,
+        #[structopt(long)]
+        client_id: Option<String>,
         hash: String,
         #[structopt(long)]
         description: Option<String>,
@@ -47,7 +70,10 @@ pub enum Opt {
 
     #[structopt(about = "Upload a new image.")]
     UploadImage {
-        client_id: String,
+        #[structopt(long)]
+        access_token: Option<String>,
+        #[structopt(long)]
+        client_id: Option<String>,
         file_path: String,
         #[structopt(long)]
         album: Option<String>,
