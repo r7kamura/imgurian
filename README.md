@@ -2,9 +2,37 @@
 
 [![test](https://github.com/r7kamura/imgurian/actions/workflows/test.yml/badge.svg)](https://github.com/r7kamura/imgurian/actions/workflows/test.yml)
 
-[Imgur API](https://apidocs.imgur.com/) client for Rust.
+[Imgur API](https://apidocs.imgur.com/) client.
 
 ## Usage
+
+### Binary
+
+```console
+$ imgurian --help
+imgurian 0.1.0
+Imgur API client.
+
+USAGE:
+    imgurian <SUBCOMMAND>
+
+FLAGS:
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+
+SUBCOMMANDS:
+    delete-image             Delete an image.
+    favorite-image           Favorite an image.
+    generate-access-token    Generates an access token from given refresh token.
+    get-account              Get information about an account.
+    get-image                Get information about an image.
+    help                     Prints this message or the help of the given subcommand(s)
+    list-account-images      List account images.
+    update-image             Update information about an image.
+    upload-image             Upload a new image.
+```
+
+### Library
 
 ```rust
 use imgurian::client::Client;
@@ -18,5 +46,3 @@ async fn main() {
     dbg!(image);
 }
 ```
-
-See [examples](/examples) for more.

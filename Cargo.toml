@@ -16,8 +16,17 @@ reqwest = { version = "0.11.6" }
 serde = { version = "1.0.130", features = ["derive"] }
 serde_json = "1.0.69"
 serde_path_to_error = "0.1.5"
+structopt = { version = "0.3.25", optional = true }
+tokio = { version = "1.13.0", features = ["rt-multi-thread", "macros"], optional = true }
 
 [dev-dependencies]
 structopt = "0.3.25"
-tokio = { version = "1.13.0", features = ["rt-multi-thread", "macros"] }
 wiremock = "0.5.8"
+tokio = { version = "1.13.0", features = ["rt-multi-thread", "macros"] }
+
+[features]
+binary = ["structopt", "tokio"]
+
+[[bin]]
+name = "imgurian"
+required-features = ["binary"]
