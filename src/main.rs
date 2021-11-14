@@ -10,16 +10,16 @@ use structopt::StructOpt;
 async fn main() -> Result<()> {
     let opt = Opt::from_args();
     match opt {
-        Opt::DeleteImage { .. } => delete_image(opt).await?,
-        Opt::FavoriteImage { .. } => favorite_image(opt).await?,
-        Opt::GenerateAccessToken { .. } => generate_access_token(opt).await?,
-        Opt::GetAccount { .. } => get_account(opt).await?,
-        Opt::GetAccountImage { .. } => get_account_image(opt).await?,
-        Opt::GetAccountImagesCount { .. } => get_account_images_count(opt).await?,
-        Opt::GetImage { .. } => get_image(opt).await?,
-        Opt::ListAccountImages { .. } => list_account_images(opt).await?,
-        Opt::UpdateImage { .. } => update_image(opt).await?,
-        Opt::UploadImage { .. } => upload_image(opt).await?,
+        Opt::DeleteImage(input) => delete_image(input).await?,
+        Opt::FavoriteImage(input) => favorite_image(input).await?,
+        Opt::GenerateAccessToken(input) => generate_access_token(input).await?,
+        Opt::GetAccount(input) => get_account(input).await?,
+        Opt::GetAccountImage(input) => get_account_image(input).await?,
+        Opt::GetAccountImagesCount(input) => get_account_images_count(input).await?,
+        Opt::GetImage(input) => get_image(input).await?,
+        Opt::ListAccountImages(input) => list_account_images(input).await?,
+        Opt::UpdateImage(input) => update_image(input).await?,
+        Opt::UploadImage(input) => upload_image(input).await?,
     }
     Ok(())
 }
