@@ -13,8 +13,9 @@ pub async fn get_account_image(opt: Opt) -> Result<()> {
         let client = Client::builder()
             .credentials(access_token, client_id)
             .build()?;
-        let basic = client.get_account_image(user_name, image_id).send().await?;
-        dbg!(basic);
+        let model = client.get_account_image(user_name, image_id).send().await?;
+        let json = serde_json::to_string(&model)?;
+        println!("{}", json);
         Ok(())
     } else {
         panic!()

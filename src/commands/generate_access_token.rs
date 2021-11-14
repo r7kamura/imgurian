@@ -9,12 +9,13 @@ pub async fn generate_access_token(opt: Opt) -> Result<()> {
         refresh_token,
     } = opt
     {
-        let basic = Client::builder()
+        let model = Client::builder()
             .build()?
             .generate_access_token(client_id, client_secret, refresh_token)
             .send()
             .await?;
-        dbg!(basic);
+        let json = serde_json::to_string(&model)?;
+        println!("{}", json);
         Ok(())
     } else {
         panic!()

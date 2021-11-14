@@ -12,8 +12,9 @@ pub async fn get_account_images_count(opt: Opt) -> Result<()> {
         let client = Client::builder()
             .credentials(access_token, client_id)
             .build()?;
-        let basic = client.get_account_images_count(user_name).send().await?;
-        dbg!(basic);
+        let model = client.get_account_images_count(user_name).send().await?;
+        let json = serde_json::to_string(&model)?;
+        println!("{}", json);
         Ok(())
     } else {
         panic!()

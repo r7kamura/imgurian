@@ -21,8 +21,9 @@ pub async fn update_image(opt: Opt) -> Result<()> {
         if let Some(value) = title {
             builder = builder.title(value);
         }
-        let image = builder.send().await?;
-        dbg!(image);
+        let model = builder.send().await?;
+        let json = serde_json::to_string(&model)?;
+        println!("{}", json);
         Ok(())
     } else {
         panic!()

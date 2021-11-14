@@ -18,8 +18,9 @@ pub async fn list_account_images(opt: Opt) -> Result<()> {
         if let Some(value) = per_page {
             builder = builder.per_page(value);
         }
-        let basic = builder.send().await?;
-        dbg!(basic);
+        let model = builder.send().await?;
+        let json = serde_json::to_string(&model)?;
+        println!("{}", json);
         Ok(())
     } else {
         panic!()
