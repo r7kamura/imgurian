@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.3.0 - 2021-11-14
+
 ### Added
 
 - Support get_account_image endpoint.
