@@ -203,11 +203,12 @@ async fn map_json_to_model<T: DeserializeOwned>(response: reqwest::Response) -> 
 }
 
 async fn map_unsuccess_to_imgur_error(response: reqwest::Response) -> Result<reqwest::Response> {
-    if response.status().is_success() {
-        Ok(response)
-    } else {
+    let status = response.status();
+    if status.is_client_error() || status.is_server_error() {
         let details = map_json_to_model(response).await?;
         Err(ImgurError { details })
+    } else {
+        Ok(response)
     }
 }
 
