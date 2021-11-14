@@ -35,6 +35,16 @@ pub enum Opt {
         user_name: String,
     },
 
+    #[structopt(about = "Get information about an image of an account.")]
+    GetAccountImage {
+        #[structopt(long)]
+        access_token: Option<String>,
+        #[structopt(long)]
+        client_id: Option<String>,
+        user_name: String,
+        image_id: String,
+    },
+
     #[structopt(about = "Get information about an image.")]
     GetImage {
         #[structopt(long)]
