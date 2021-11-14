@@ -12,6 +12,7 @@
 ### Changed
 
 - Change CLI output format from dbg to JSON.
+- Rename `JsonError` with `JsonDeserializeError`.
 
 ## 0.2.10 - 2021-11-14
 
