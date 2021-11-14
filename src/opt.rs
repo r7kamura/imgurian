@@ -45,6 +45,15 @@ pub enum Opt {
         image_id: String,
     },
 
+    #[structopt(about = "Get the total number of images associated with the account.")]
+    GetAccountImagesCount {
+        #[structopt(long)]
+        access_token: Option<String>,
+        #[structopt(long)]
+        client_id: Option<String>,
+        user_name: String,
+    },
+
     #[structopt(about = "Get information about an image.")]
     GetImage {
         #[structopt(long)]

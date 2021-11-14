@@ -5,6 +5,7 @@
 ### Added
 
 - Support get_account_image endpoint.
+- Support get_account_images_count endpoint.
 
 ## 0.2.10 - 2021-11-14
 
