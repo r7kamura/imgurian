@@ -10,7 +10,7 @@
 
 ```console
 $ imgurian --help
-imgurian 0.1.0
+imgurian 0.2.10
 Imgur API client.
 
 USAGE:
