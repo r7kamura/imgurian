@@ -4,103 +4,124 @@ use structopt::StructOpt;
 #[structopt(about = "Imgur API client.")]
 pub enum Opt {
     #[structopt(about = "Delete an image.")]
-    DeleteImage {
-        #[structopt(long)]
-        access_token: Option<String>,
-        #[structopt(long)]
-        client_id: Option<String>,
-        hash: String,
-    },
-
+    DeleteImage(DeleteImageInput),
     #[structopt(about = "Favorite an image.")]
-    FavoriteImage {
-        #[structopt(long)]
-        access_token: String,
-        hash: String,
-    },
-
+    FavoriteImage(FavoriteImageInput),
     #[structopt(about = "Generates an access token from given refresh token.")]
-    GenerateAccessToken {
-        client_id: String,
-        client_secret: String,
-        refresh_token: String,
-    },
-
+    GenerateAccessToken(GenerateAccessTokenInput),
     #[structopt(about = "Get information about an account.")]
-    GetAccount {
-        #[structopt(long)]
-        access_token: Option<String>,
-        #[structopt(long)]
-        client_id: Option<String>,
-        user_name: String,
-    },
-
+    GetAccount(GetAccountInput),
     #[structopt(about = "Get information about an image of an account.")]
-    GetAccountImage {
-        #[structopt(long)]
-        access_token: Option<String>,
-        #[structopt(long)]
-        client_id: Option<String>,
-        user_name: String,
-        image_id: String,
-    },
-
+    GetAccountImage(GetAccountImageInput),
     #[structopt(about = "Get the total number of images associated with the account.")]
-    GetAccountImagesCount {
-        #[structopt(long)]
-        access_token: Option<String>,
-        #[structopt(long)]
-        client_id: Option<String>,
-        user_name: String,
-    },
-
+    GetAccountImagesCount(GetAccountImagesCountInput),
     #[structopt(about = "Get information about an image.")]
-    GetImage {
-        #[structopt(long)]
-        access_token: Option<String>,
-        #[structopt(long)]
-        client_id: Option<String>,
-        hash: String,
-    },
-
+    GetImage(GetImageInput),
     #[structopt(about = "List account images.")]
-    ListAccountImages {
-        #[structopt(long)]
-        access_token: String,
-        user_name: String,
-        #[structopt(long)]
-        page: Option<u32>,
-        #[structopt(long)]
-        per_page: Option<u8>,
-    },
-
+    ListAccountImages(ListAccountImagesInput),
     #[structopt(about = "Update information about an image.")]
-    UpdateImage {
-        #[structopt(long)]
-        access_token: Option<String>,
-        #[structopt(long)]
-        client_id: Option<String>,
-        hash: String,
-        #[structopt(long)]
-        description: Option<String>,
-        #[structopt(long)]
-        title: Option<String>,
-    },
-
+    UpdateImage(UpdateImageInput),
     #[structopt(about = "Upload a new image.")]
-    UploadImage {
-        #[structopt(long)]
-        access_token: Option<String>,
-        #[structopt(long)]
-        client_id: Option<String>,
-        file_path: String,
-        #[structopt(long)]
-        album: Option<String>,
-        #[structopt(long)]
-        description: Option<String>,
-        #[structopt(long)]
-        name: Option<String>,
-        #[structopt(long)]
-        title: Option<String>,
-    },
+    UploadImage(UploadImageInput),
+}
+
+#[derive(Debug, StructOpt)]
+pub struct DeleteImageInput {
+    #[structopt(long)]
+    pub access_token: Option<String>,
+    #[structopt(long)]
+    pub client_id: Option<String>,
+    pub hash: String,
+}
+
+#[derive(Debug, StructOpt)]
+pub struct FavoriteImageInput {
+    #[structopt(long)]
+    pub access_token: String,
+    pub hash: String,
+}
+
+#[derive(Debug, StructOpt)]
+pub struct GenerateAccessTokenInput {
+    pub client_id: String,
+    pub client_secret: String,
+    pub refresh_token: String,
+}
+
+#[derive(Debug, StructOpt)]
+pub struct GetAccountInput {
+    #[structopt(long)]
+    pub access_token: Option<String>,
+    #[structopt(long)]
+    pub client_id: Option<String>,
+    pub user_name: String,
+}
+
+#[derive(Debug, StructOpt)]
+pub struct GetAccountImageInput {
+    #[structopt(long)]
+    pub access_token: Option<String>,
+    #[structopt(long)]
+    pub client_id: Option<String>,
+    pub user_name: String,
+    pub image_id: String,
+}
+
+#[derive(Debug, StructOpt)]
+pub struct GetAccountImagesCountInput {
+    #[structopt(long)]
+    pub access_token: Option<String>,
+    #[structopt(long)]
+    pub client_id: Option<String>,
+    pub user_name: String,
+}
+
+#[derive(Debug, StructOpt)]
+pub struct GetImageInput {
+    #[structopt(long)]
+    pub access_token: Option<String>,
+    #[structopt(long)]
+    pub client_id: Option<String>,
+    pub hash: String,
+}
+
+#[derive(Debug, StructOpt)]
+pub struct ListAccountImagesInput {
+    #[structopt(long)]
+    pub access_token: String,
+    pub user_name: String,
+    #[structopt(long)]
+    pub page: Option<u32>,
+    #[structopt(long)]
+    pub per_page: Option<u8>,
+}
+
+#[derive(Debug, StructOpt)]
+pub struct UpdateImageInput {
+    #[structopt(long)]
+    pub access_token: Option<String>,
+    #[structopt(long)]
+    pub client_id: Option<String>,
+    pub hash: String,
+    #[structopt(long)]
+    pub description: Option<String>,
+    #[structopt(long)]
+    pub title: Option<String>,
+}
+
+#[derive(Debug, StructOpt)]
+pub struct UploadImageInput {
+    #[structopt(long)]
+    pub access_token: Option<String>,
+    #[structopt(long)]
+    pub client_id: Option<String>,
+    pub file_path: String,
+    #[structopt(long)]
+    pub album: Option<String>,
+    #[structopt(long)]
+    pub description: Option<String>,
+    #[structopt(long)]
+    pub name: Option<String>,
+    #[structopt(long)]
+    pub title: Option<String>,
 }
