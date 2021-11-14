@@ -1,13 +1,13 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Image {
     data: ImageData,
     success: bool,
     status: u32,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct ImageData {
     account_id: Option<u32>,
     account_url: Option<String>,
@@ -37,7 +37,7 @@ pub struct ImageData {
     width: u32,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Images {
     data: Vec<ImageData>,
     success: bool,

@@ -1,13 +1,13 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Account {
     data: AccountData,
     success: bool,
     status: u32,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct AccountData {
     avatar: Option<String>,
     bio: Option<String>,
@@ -20,7 +20,7 @@ pub struct AccountData {
     user_follow: AccountUserFollow,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct AccountUserFollow {
     status: bool,
 }

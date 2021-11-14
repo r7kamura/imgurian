@@ -7,6 +7,10 @@
 - Support get_account_image endpoint.
 - Support get_account_images_count endpoint.
 
+### Changed
+
+- Change CLI output format from dbg to JSON.
+
 ## 0.2.10 - 2021-11-14
 
 No changes.

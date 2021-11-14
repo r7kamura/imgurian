@@ -3,8 +3,11 @@ pub enum Error {
     ImgurError {
         details: crate::models::Error,
     },
-    JsonError {
+    JsonDeserializeError {
         source: serde_path_to_error::Error<serde_json::Error>,
+    },
+    JsonSerializeError {
+        source: serde_json::Error,
     },
     ReqwestError {
         source: reqwest::Error,
@@ -17,8 +20,14 @@ impl From<reqwest::Error> for Error {
     }
 }
 
+impl From<serde_json::Error> for Error {
+    fn from(source: serde_json::Error) -> Self {
+        Error::JsonSerializeError { source }
+    }
+}
+
 impl From<serde_path_to_error::Error<serde_json::Error>> for Error {
     fn from(source: serde_path_to_error::Error<serde_json::Error>) -> Self {
-        Error::JsonError { source }
+        Error::JsonDeserializeError { source }
     }
 }
