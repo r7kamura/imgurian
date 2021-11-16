@@ -6,8 +6,6 @@
 
 ## Usage
 
-### Binary
-
 Install an executable binary from [Releases](https://github.com/r7kamura/imgurian/releases), or run `cargo install imgurian`.
 
 ```console
@@ -34,19 +32,4 @@ SUBCOMMANDS:
     list-account-images         List account images.
     update-image                Update information about an image.
     upload-image                Upload a new image.
-```
-
-### Library
-
-```rust
-use imgurian::client::Client;
-use std::fs;
-
-#[tokio::main]
-async fn main() {
-    let bytes = fs::read("/path/to/image").unwrap();
-    let client = Client::builder().client_id("YOUR_CLIENT_ID").build().unwrap();
-    let image = client.upload_image(bytes).send().await.unwrap();
-    dbg!(image);
-}
 ```
