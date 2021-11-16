@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Removed
+
+- Remove library usage.
+
 ## 0.3.0 - 2021-11-14
 
 ### Added
