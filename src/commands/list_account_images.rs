@@ -1,18 +1,13 @@
-use crate::client::Client;
 use crate::opt::ListAccountImagesInput;
-use crate::result::Result;
+use imgur_openapi::apis::account_api;
+use imgur_openapi::apis::configuration::Configuration;
 
-pub async fn list_account_images(input: ListAccountImagesInput) -> Result<()> {
-    let client = Client::builder().access_token(input.access_token).build()?;
-    let mut builder = client.list_account_images(input.user_name);
-    if let Some(value) = input.page {
-        builder = builder.page(value);
-    }
-    if let Some(value) = input.per_page {
-        builder = builder.per_page(value);
-    }
-    let model = builder.send().await?;
-    let json = serde_json::to_string(&model)?;
+pub async fn list_account_images(input: ListAccountImagesInput) {
+    let mut configuration = Configuration::new();
+    configuration.oauth_access_token = Some(input.access_token);
+    let model = account_api::get_account_images(&configuration, &input.user_name)
+        .await
+        .unwrap();
+    let json = serde_json::to_string(&model).unwrap();
     println!("{}", json);
-    Ok(())
 }
