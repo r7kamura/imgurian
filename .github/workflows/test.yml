@@ -26,4 +26,3 @@ jobs:
       - run: cargo fmt -- --check
       - run: cargo build
       - run: cargo clippy -- -D warnings
-      - run: cargo test
