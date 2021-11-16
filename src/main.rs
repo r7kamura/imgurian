@@ -3,11 +3,10 @@ use imgurian::commands::{
     get_account_images_count, get_image, list_account_images, update_image, upload_image,
 };
 use imgurian::opt::Opt;
-use imgurian::result::Result;
 use structopt::StructOpt;
 
 #[tokio::main]
-async fn main() -> Result<()> {
+async fn main() {
     match Opt::from_args() {
         Opt::DeleteImage(input) => delete_image(input).await,
         Opt::FavoriteImage(input) => favorite_image(input).await,

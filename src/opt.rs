@@ -60,9 +60,7 @@ pub struct GetAccountInput {
 #[derive(Debug, StructOpt)]
 pub struct GetAccountImageInput {
     #[structopt(long)]
-    pub access_token: Option<String>,
-    #[structopt(long)]
-    pub client_id: Option<String>,
+    pub access_token: String,
     pub user_name: String,
     pub image_id: String,
 }
@@ -70,9 +68,7 @@ pub struct GetAccountImageInput {
 #[derive(Debug, StructOpt)]
 pub struct GetAccountImagesCountInput {
     #[structopt(long)]
-    pub access_token: Option<String>,
-    #[structopt(long)]
-    pub client_id: Option<String>,
+    pub access_token: String,
     pub user_name: String,
 }
 

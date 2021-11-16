@@ -1,28 +1,26 @@
-use crate::client::Client;
+use crate::commands::map_to_api_key;
 use crate::opt::UploadImageInput;
-use crate::result::Result;
+use base64;
+use imgur_openapi::apis::configuration::Configuration;
+use imgur_openapi::apis::image_api;
 use std::fs;
 
-pub async fn upload_image(opt: UploadImageInput) -> Result<()> {
-    let client = Client::builder()
-        .credentials(opt.access_token, opt.client_id)
-        .build()?;
-    let bytes = fs::read(opt.file_path).unwrap();
-    let mut builder = client.upload_image(bytes);
-    if let Some(value) = opt.album {
-        builder = builder.album(value);
-    }
-    if let Some(value) = opt.description {
-        builder = builder.description(value);
-    }
-    if let Some(value) = opt.name {
-        builder = builder.name(value);
-    }
-    if let Some(value) = opt.title {
-        builder = builder.title(value);
-    }
-    let model = builder.send().await?;
-    let json = serde_json::to_string(&model)?;
+pub async fn upload_image(input: UploadImageInput) {
+    let mut configuration = Configuration::new();
+    configuration.api_key = map_to_api_key(input.client_id);
+    configuration.oauth_access_token = input.access_token;
+    let bytes = fs::read(input.file_path).unwrap();
+    let image = base64::encode(bytes);
+    let model = image_api::upload_image(
+        &configuration,
+        &image,
+        input.album.as_deref(),
+        input.description.as_deref(),
+        input.name.as_deref(),
+        input.title.as_deref(),
+    )
+    .await
+    .unwrap();
+    let json = serde_json::to_string(&model).unwrap();
     println!("{}", json);
-    Ok(())
 }

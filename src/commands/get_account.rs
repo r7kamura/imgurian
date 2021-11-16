@@ -1,13 +1,13 @@
-use crate::client::Client;
 use crate::opt::GetAccountInput;
-use crate::result::Result;
+use imgur_openapi::apis::account_api;
+use imgur_openapi::apis::configuration::Configuration;
 
-pub async fn get_account(input: GetAccountInput) -> Result<()> {
-    let client = Client::builder()
-        .credentials(input.access_token, input.client_id)
-        .build()?;
-    let model = client.get_account(input.user_name).send().await?;
-    let json = serde_json::to_string(&model)?;
+pub async fn get_account(input: GetAccountInput) {
+    let mut configuration = Configuration::new();
+    configuration.bearer_access_token = input.access_token;
+    let model = account_api::get_account(&configuration, &input.user_name)
+        .await
+        .unwrap();
+    let json = serde_json::to_string(&model).unwrap();
     println!("{}", json);
-    Ok(())
 }
