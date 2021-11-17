@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Changed
+
+- Change Error type structure.
+
 ### Removed
 
 - Remove unnecessry dependencies.
