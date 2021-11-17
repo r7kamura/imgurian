@@ -10,7 +10,7 @@ Install an executable binary from [Releases](https://github.com/r7kamura/imguria
 
 ```console
 $ imgurian --help
-imgurian 0.4.0
+imgurian 0.5.0
 Imgur API client.
 
 USAGE:
