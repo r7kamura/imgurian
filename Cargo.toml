@@ -7,7 +7,7 @@ documentation = "https://docs.rs/imgurian"
 homepage = "https://github.com/r7kamura/imgurian"
 license = "MIT"
 readme = "README.md"
-repository = "https://github.com/r7kamura/imgurian.git"
+repository = "https://github.com/r7kamura/imgurian"
 include = ["src/**/*", "LICENSE.txt", "README.md"]
 
 [dependencies]

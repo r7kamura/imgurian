@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Fixed
+
+- Fix repository field in Cargo.toml.
+
 ## 0.5.0 - 2021-11-17
 
 ### Changed
