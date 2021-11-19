@@ -7,16 +7,4 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        target:
-          - x86_64-apple-darwin
-          - x86_64-pc-windows-gnu
-          - x86_64-unknown-linux-musl
-    steps:
-      - uses: actions/checkout@v2
-      - uses: rust-build/rust-build.action@v1.2.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RUSTTARGET: ${{ matrix.target }}
+    uses: r7kamura/workflows/.github/workflows/rust-release-binaries.yml@main
